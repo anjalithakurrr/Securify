@@ -6,12 +6,10 @@ from datetime import datetime
 from face_match import verify_face
 
 app = Flask(__name__)
-CORS(app)  # Allow frontend requests
+CORS(app)
 
-# -----------------------------
-# File paths
-# -----------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
 RESULTS_FILE = os.path.join(BASE_DIR, "results.json")
@@ -19,16 +17,12 @@ DATABASE_FILE = os.path.join(BASE_DIR, "database.json")
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# -----------------------------
-# Load agent database
-# -----------------------------
-with open(DATABASE_FILE, "r") as file:
-    data = json.load(file)
-    agents = {agent["id"]: agent for agent in data["agents"]}
+# ------------------ Load Agents ------------------
+with open(DATABASE_FILE, "r") as f:
+    agents_data = json.load(f)["agents"]
+    agents = {agent["id"]: agent for agent in agents_data}
 
-# -----------------------------
-# Load users
-# -----------------------------
+# ------------------ Helpers ------------------
 def load_users():
     with open(USERS_FILE, "r") as f:
         return json.load(f)["users"]
@@ -37,9 +31,6 @@ def save_users(users):
     with open(USERS_FILE, "w") as f:
         json.dump({"users": users}, f, indent=4)
 
-# -----------------------------
-# Load results
-# -----------------------------
 def load_results():
     with open(RESULTS_FILE, "r") as f:
         return json.load(f)["results"]
@@ -48,67 +39,60 @@ def save_results(results):
     with open(RESULTS_FILE, "w") as f:
         json.dump({"results": results}, f, indent=4)
 
-# -----------------------------
-# Routes
-# -----------------------------
+# ------------------ Routes ------------------
 @app.route("/")
 def home():
     return "Securify Backend Running"
 
-# -----------------------------
-# Login
-# -----------------------------
+# -------- LOGIN --------
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
-
     users = load_users()
+
     for user in users:
-        if user["username"] == username and user["password"] == password:
+        if user["username"] == data.get("username") and user["password"] == data.get("password"):
             return jsonify({"success": True})
+
     return jsonify({"success": False})
 
-# -----------------------------
-# Register
-# -----------------------------
+# -------- REGISTER --------
 @app.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
-    username = data.get("username")
-    password = data.get("password")
-
     users = load_users()
-    if any(u["username"] == username for u in users):
-        return jsonify({"success": False})  # username exists
 
-    users.append({"username": username, "password": password})
+    if any(u["username"] == data.get("username") for u in users):
+        return jsonify({"success": False})
+
+    users.append({
+        "username": data.get("username"),
+        "password": data.get("password")
+    })
+
     save_users(users)
     return jsonify({"success": True})
 
-# -----------------------------
-# Verify
-# -----------------------------
+# -------- VERIFY --------
 @app.route("/verify", methods=["POST"])
 def verify_agent():
-    agent_id = request.form.get("agentId")  # matches frontend
+    agent_id = request.form.get("agentId")
     image = request.files.get("image")
 
     if agent_id not in agents:
-        return jsonify({"success": False, "status": "fail", "message": "Agent not found", "confidence": 0})
+        return jsonify({"success": False, "status": "fail", "confidence": 0})
 
     if not image:
-        return jsonify({"success": False, "status": "fail", "message": "Image not provided", "confidence": 0})
+        return jsonify({"success": False, "status": "fail", "confidence": 0})
 
     image_path = os.path.join(UPLOAD_FOLDER, image.filename)
     image.save(image_path)
 
     result = verify_face(agent_id, image_path)
-    os.remove(image_path)  # privacy-first: delete uploaded image
+    os.remove(image_path)
 
-    # Update trust score
     agent = agents[agent_id]
+
     if result["matched"]:
         agent["trust_score"] = min(agent["trust_score"] + 0.05, 1.0)
         status = "success"
@@ -116,11 +100,9 @@ def verify_agent():
         agent["trust_score"] = max(agent["trust_score"] - 0.1, 0.0)
         status = "fail"
 
-    # Save database.json
     with open(DATABASE_FILE, "w") as f:
         json.dump({"agents": list(agents.values())}, f, indent=4)
 
-    # Append to results.json
     results = load_results()
     results.append({
         "agentId": agent_id,
@@ -136,24 +118,17 @@ def verify_agent():
         "confidence": result["confidence"]
     })
 
-# -----------------------------
-# Dashboard endpoint
-# -----------------------------
+# -------- DASHBOARD --------
 @app.route("/dashboard", methods=["GET"])
 def dashboard():
     results = load_results()
-    total = len(results)
-    success_count = len([r for r in results if r["status"] == "success"])
-    fail_count = len([r for r in results if r["status"] == "fail"])
-
     return jsonify({
-        "total": total,
-        "success": success_count,
-        "fail": fail_count
+        "total": len(results),
+        "success": len([r for r in results if r["status"] == "success"]),
+        "fail": len([r for r in results if r["status"] == "fail"])
     })
 
-# -----------------------------
-# Run app
-# -----------------------------
+# ------------------ Run ------------------
 if __name__ == "__main__":
     app.run(debug=True)
+
