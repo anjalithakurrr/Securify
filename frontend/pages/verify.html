@@ -11,18 +11,35 @@
 
     <!-- Main Content Area -->
     <div class="main-content">
-        <h1>Face Verification</h1>
+        <h1>Agent Identity Verification</h1>
+<p style="margin-bottom:20px;">
+    Rapid, on-demand verification for doorstep interactions. 
+    This process verifies agent identity and authorization status 
+    without continuous tracking.
+</p>
 
         <div class="card">
             <h2>Upload Image for Verification</h2>
             <form id="verifyForm">
-                <label for="userId">User ID:</label>
-                <input type="text" id="userId" name="userId" placeholder="Enter User ID" required>
+                <label for="agentId">Agent ID</label>
+<input type="text" id="agentId" name="agentId" placeholder="e.g. AGT102" required>
 
-                <label for="image">Upload Image:</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
+<label for="agentType">Organization Type</label>
+<select id="agentType" name="agentType" required>
+    <option value="">Select Organization</option>
+    <option value="bank">Banking Agent</option>
+    <option value="delivery">Delivery Personnel</option>
+    <option value="security">Security Staff</option>
+</select>
+             <label for="image">Upload Image:</label>
+             <input type="file" id="image" name="image" accept="image/*" required>
 
-                <button type="submit">Verify</button>
+              <button type="submit">Verify</button>
+              <p style="margin-top:15px; font-size:14px; color:#555;">
+    Note: This prototype uses simulated AI face similarity and trust scoring 
+    for demonstration purposes only.
+</p>
+
             </form>
 
             <div id="result" style="margin-top:15px;"></div>

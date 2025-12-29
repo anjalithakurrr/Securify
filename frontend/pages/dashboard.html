@@ -12,19 +12,56 @@
     <!-- Main Content Area -->
     <div class="main-content">
         <h1>Welcome to the Dashboard</h1>
+        <p style="margin-bottom:20px;">
+    Securify is a privacy-first, AI-assisted identity verification system 
+    designed for rapid, on-demand verification during high-risk doorstep 
+    interactions. The system operates without continuous tracking or 
+    surveillance.
+</p>
 
         <!-- Example Cards -->
         <div class="card">
-            <h2>Pending Verifications</h2>
+            <h2>Active Verification Requests</h2>
+            <p style="color:#555;">
+    Each entry represents an on-demand verification event processed in real time.
+</p>
             <p>There are 5 users awaiting verification.</p>
             <span class="status-badge status-pending">Pending</span>
         </div>
 
         <div class="card">
-            <h2>Recent Results</h2>
-            <p>Latest verification results appear here.</p>
-            <span class="status-badge status-success">Success</span>
-        </div>
+    <h2>Trust Events Timeline</h2>
+    <p>Recent identity verification events affecting agent trust.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Agent ID</th>
+                <th>Time</th>
+                <th>Result</th>
+                <th>Trust Impact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AGT102</td>
+                <td>14:32</td>
+                <td>
+                    <span class="status-badge status-success">Verified</span>
+                </td>
+                <td style="color:green; font-weight:600;">+5</td>
+            </tr>
+            <tr>
+                <td>AGT087</td>
+                <td>12:10</td>
+                <td>
+                    <span class="status-badge status-fail">Failed</span>
+                </td>
+                <td style="color:red; font-weight:600;">-10</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
     </div>
 
     <!-- Load Navbar Component -->
@@ -38,6 +75,5 @@
         import { createSidebar } from '../components/sidebar.js';
         document.body.appendChild(createSidebar());
     </script>
-
 </body>
 </html>

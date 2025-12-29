@@ -8,12 +8,48 @@
 </head>
 <body>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <div class="main-content">
-        <h1>Verification Results</h1>
+        <h1>Verification Outcome</h1>
+<p style="margin-bottom:20px;">
+    The following assessment is generated using AI-assisted face similarity 
+    and rule-based trust analysis based on recent verification events.
+</p>
+<div class="card">
+    <h2>Agent Verification Summary</h2>
+
+    <p><strong>Agent ID:</strong> AGT102</p>
+    <p><strong>Organization:</strong> Banking Agent</p>
+    <p><strong>Employment Status:</strong> Active</p>
+
+    <p>
+        <strong>Face Match:</strong>
+        <span class="status-badge status-success">Matched (87%)</span>
+    </p>
+
+    <p>
+        <strong>Overall Status:</strong>
+        <span class="status-badge status-success">Verified</span>
+    </p>
+</div>
+<div class="card">
+    <h2>Trust Impact Analysis</h2>
+
+    <p><strong>Previous Trust Score:</strong> 72</p>
+    <p><strong>Current Event Impact:</strong> +5</p>
+    <p><strong>Updated Trust Score:</strong> 77</p>
+
+    <p style="margin-top:10px; color:#555;">
+        Trust score is updated only during verification events.
+        No continuous monitoring or location tracking is performed.
+    </p>
+</div>
+
+
 
         <div class="card">
-            <h2>Recent Verifications</h2>
+            <h2>Recent Trust Events</h2>
+
             <table>
                 <thead>
                     <tr>
@@ -23,7 +59,7 @@
                     </tr>
                 </thead>
                 <tbody id="resultsTable">
-                    <!-- Rows will be populated dynamically via JS -->
+                    <!-- Mock data will load here -->
                 </tbody>
             </table>
         </div>
@@ -41,32 +77,35 @@
         document.body.appendChild(createSidebar());
     </script>
 
-    <!-- JS to populate results -->
-    <script type="module">
-        import { getResults } from '../js/api.js';
+    <!-- Mock Data Script -->
+    <script>
+        const mockResults = [
+            { userId: "AGENT_101", status: "Success", date: "2025-01-10" },
+            { userId: "AGENT_102", status: "Failed", date: "2025-01-10" },
+            { userId: "AGENT_103", status: "Success", date: "2025-01-09" },
+            { userId: "AGENT_104", status: "Success", date: "2025-01-09" },
+            { userId: "AGENT_105", status: "Failed", date: "2025-01-08" }
+        ];
 
-        async function loadResults() {
-            const results = await getResults(); // Fetch from backend
-            const tbody = document.getElementById('resultsTable');
-            if (!results) return;
+        const tableBody = document.getElementById("resultsTable");
 
-            tbody.innerHTML = '';
-            results.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${item.userId}</td>
-                    <td>
-                        <span class="status-badge ${item.status === 'Success' ? 'status-success' : 'status-fail'}">
-                            ${item.status}
-                        </span>
-                    </td>
-                    <td>${item.date}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
+        mockResults.forEach(item => {
+            const row = document.createElement("tr");
 
-        loadResults();
+            row.innerHTML = `
+                <td>${item.userId}</td>
+                <td>
+                    <span class="status-badge ${
+                        item.status === "Success" ? "status-success" : "status-fail"
+                    }">
+                        ${item.status}
+                    </span>
+                </td>
+                <td>${item.date}</td>
+            `;
+
+            tableBody.appendChild(row);
+        });
     </script>
 
 </body>

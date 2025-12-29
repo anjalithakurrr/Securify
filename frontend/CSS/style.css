@@ -1,13 +1,12 @@
 /* -----------------------------
    Global Styles
 ------------------------------ */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+html, body {
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5;
-    color: #333;
-    line-height: 1.6;
+    width: 100%;
+    min-height: 100%;
+    overflow-y: auto;
 }
 
 a {
@@ -69,9 +68,12 @@ a {
    Main Content
 ------------------------------ */
 .main-content {
-    margin-left: 240px; /* Width of sidebar */
+    margin-left: 240px;
     padding: 30px;
+    width: calc(100% - 240px);
+    box-sizing: border-box;
 }
+
 
 /* -----------------------------
    Buttons
@@ -192,4 +194,9 @@ h3 {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 20px;
     margin-bottom: 20px;
+}
+.main-content::after {
+    content: "";
+    display: block;
+    height: 60px;
 }
