@@ -1,15 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Securify</title>
+    <meta charset="UTF-8">
+    <title>Securify – Agent Verification</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .card {
+            background: white;
+            width: 350px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Securify – Agent Verification</h1>
 
-    <input type="text" id="agentId" placeholder="Enter Agent ID">
-    <button onclick="verifyAgent()">Verify</button>
+    <div class="card">
+        <h2>Securify</h2>
+        <p>Agent Identity Verification</p>
 
-    <p id="result"></p>
+        <input type="text" id="agentId" placeholder="Enter Agent ID (e.g. AG001)">
+        <br>
+        <button onclick="verifyAgent()">Verify Agent</button>
+
+        <p id="result"></p>
+    </div>
 
     <script>
         function verifyAgent() {
@@ -24,10 +74,20 @@
             })
             .then(response => response.json())
             .then(data => {
+                if (data.verified) {
+                    document.getElementById("result").innerText =
+                        "✅ Agent Verified (Risk: Low)";
+                } else {
+                    document.getElementById("result").innerText =
+                        "❌ Agent Not Verified (High Risk)";
+                }
+            })
+            .catch(error => {
                 document.getElementById("result").innerText =
-                    data.verified ? "Agent Verified ✅" : "Agent Not Verified ❌";
+                    "⚠️ Backend not running";
             });
         }
     </script>
+
 </body>
 </html>
