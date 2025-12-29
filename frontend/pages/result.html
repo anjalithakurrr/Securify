@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Securify</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1>Verification Results</h1>
+
+        <div class="card">
+            <h2>Recent Verifications</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTable">
+                    <!-- Rows will be populated dynamically via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <script type="module">
+        import { createNavbar } from '../components/navbar.js';
+        document.body.prepend(createNavbar());
+    </script>
+
+    <!-- Sidebar -->
+    <script type="module">
+        import { createSidebar } from '../components/sidebar.js';
+        document.body.appendChild(createSidebar());
+    </script>
+
+    <!-- JS to populate results -->
+    <script type="module">
+        import { getResults } from '../js/api.js';
+
+        async function loadResults() {
+            const results = await getResults(); // Fetch from backend
+            const tbody = document.getElementById('resultsTable');
+            if (!results) return;
+
+            tbody.innerHTML = '';
+            results.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.userId}</td>
+                    <td>
+                        <span class="status-badge ${item.status === 'Success' ? 'status-success' : 'status-fail'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td>${item.date}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        loadResults();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify - Securify</title>
+    <!-- Link to style.css -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1>Face Verification</h1>
+
+        <div class="card">
+            <h2>Upload Image for Verification</h2>
+            <form id="verifyForm">
+                <label for="userId">User ID:</label>
+                <input type="text" id="userId" name="userId" placeholder="Enter User ID" required>
+
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+
+                <button type="submit">Verify</button>
+            </form>
+
+            <div id="result" style="margin-top:15px;"></div>
+        </div>
+    </div>
+
+    <!-- Load Navbar -->
+    <script type="module">
+        import { createNavbar } from '../components/navbar.js';
+        document.body.prepend(createNavbar());
+    </script>
+
+    <!-- Load Sidebar -->
+    <script type="module">
+        import { createSidebar } from '../components/sidebar.js';
+        document.body.appendChild(createSidebar());
+    </script>
+
+    <!-- Handle Verification -->
+    <script type="module">
+        import { verifyFace } from '../js/api.js';
+
+        const form = document.getElementById('verifyForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            resultDiv.textContent = 'Verifying...';
+
+            try {
+                const response = await verifyFace(formData); // Calls backend API
+                if (response.success) {
+                    resultDiv.innerHTML = `<span class="status-badge status-success">Verification Success</span>`;
+                } else {
+                    resultDiv.innerHTML = `<span class="status-badge status-fail">Verification Failed</span>`;
+                }
+            } catch (error) {
+                console.error(error);
+                resultDiv.innerHTML = `<span class="status-badge status-fail">Error occurred</span>`;
+            }
+        });
+    </script>
+
+</body>
+</html>

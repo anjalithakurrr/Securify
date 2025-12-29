@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Securify</title>
+    <!-- Correct path to style.css -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1>Welcome to the Dashboard</h1>
+
+        <!-- Example Cards -->
+        <div class="card">
+            <h2>Pending Verifications</h2>
+            <p>There are 5 users awaiting verification.</p>
+            <span class="status-badge status-pending">Pending</span>
+        </div>
+
+        <div class="card">
+            <h2>Recent Results</h2>
+            <p>Latest verification results appear here.</p>
+            <span class="status-badge status-success">Success</span>
+        </div>
+    </div>
+
+    <!-- Load Navbar Component -->
+    <script type="module">
+        import { createNavbar } from '../components/navbar.js';
+        document.body.prepend(createNavbar());
+    </script>
+
+    <!-- Load Sidebar Component -->
+    <script type="module">
+        import { createSidebar } from '../components/sidebar.js';
+        document.body.appendChild(createSidebar());
+    </script>
+
+</body>
+</html>
