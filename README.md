@@ -1,5 +1,6 @@
 # Securify
-AI-based identity verification system
+Privacy-First, AI-Assisted Identity 
+Verification with Context-Aware Trust Analysis
 ## Frontend Overview
 The frontend provides a simple and clean interface for users to verify agent identity.
 Users can enter an Agent ID and instantly receive verification and risk status.
