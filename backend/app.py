@@ -9,7 +9,7 @@ UPLOAD_FOLDER = "backend/uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Load agent database
-with open("backend/database.json", "r") as file:
+with open("database.json", "r") as file:
     data = json.load(file)
     agents = {agent["id"]: agent for agent in data["agents"]}
 
