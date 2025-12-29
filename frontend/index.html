@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Securify</title>
+</head>
+<body>
+    <h1>Securify – Agent Verification</h1>
+
+    <input type="text" id="agentId" placeholder="Enter Agent ID">
+    <button onclick="verifyAgent()">Verify</button>
+
+    <p id="result"></p>
+
+    <script>
+        function verifyAgent() {
+            const agentId = document.getElementById("agentId").value;
+
+            fetch("http://127.0.0.1:5000/verify", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ agent_id: agentId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText =
+                    data.verified ? "Agent Verified ✅" : "Agent Not Verified ❌";
+            });
+        }
+    </script>
+</body>
+</html>
